@@ -15,13 +15,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-//@DependsOn("transactionManager")
 @Configuration
 @EnableJpaRepositories(
     basePackages = "es.multiple.was.ds1.respository", 
-    entityManagerFactoryRef = "ds1EntityManager"//, 
-    //transactionManagerRef = "transactionManager"
-    //transactionManagerRef = "ds1TransactionManager"
+    entityManagerFactoryRef = "ds1EntityManager"
 )
 public class DsOneConfig {
 	     
@@ -29,15 +26,12 @@ public class DsOneConfig {
 	    private String primaryJndiName;
 	
 	    private JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-	
-	   // @Autowired
-	    //private WebSphereUowTransactionManager wasds1;
-	    
+		    
 	    @Bean
 	    @Primary
 	    public LocalContainerEntityManagerFactoryBean ds1EntityManager(EntityManagerFactoryBuilder builder) {
 	    	
-	    	HashMap<String, Object> properties = new HashMap<String, Object>();
+	    	HashMap<String, Object> properties = new HashMap<>();
 			properties.put("hibernate.transaction.jta.platform", WebSphereJtaPlatform.class.getName());
 			properties.put("javax.persistence.transactionType", "JTA");
 	    	
@@ -54,20 +48,5 @@ public class DsOneConfig {
 	    public DataSource ds1DataSource() {
 	  
 	    	return lookup.getDataSource(primaryJndiName);
-	    	
-	    	/*XADataSource ds = (XADataSource) lookup.getDataSource(primaryJndiName);
-
-			AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-			xaDataSource.setXaDataSource(ds);
-			xaDataSource.setUniqueResourceName("xads1");
-			return xaDataSource;*/
 	    }
-	 
-	    /*@Primary
-	    @Bean
-	    public PlatformTransactionManager ds1TransactionManager() {
-	  
-	    	return wasds1;
-	        //return new JtaTransactionManager();
-	    }*/
 }

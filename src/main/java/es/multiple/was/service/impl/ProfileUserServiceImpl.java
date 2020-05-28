@@ -1,6 +1,6 @@
 package es.multiple.was.service.impl;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,8 +19,8 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 	
 	@Override
 	public String getProfileName() {
-		Optional<ProfileUserEntity> r = profileUserRepository.findById("1");
-		return r.isPresent() ? r.get().getProfileName() : "null";
+		List<ProfileUserEntity> profiles = profileUserRepository.findAll();
+		return !profiles.isEmpty() ? profiles.get(0).getProfileName() : "null";
 	}
 	
 	@Override
